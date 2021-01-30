@@ -5,7 +5,7 @@ This library is used to split payments accross multiple gateways based on their 
 ## Example
 ```go
 func main() {
-paymentsCount := 5000
+	paymentsCount := 5000
 	type Gateway struct {
 		Id     int
 		Title  string

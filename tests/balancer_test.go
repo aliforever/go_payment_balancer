@@ -30,6 +30,7 @@ func TestBalancer(t *testing.T) {
 			Counter: 0,
 		},
 	}
+	// force tag
 	shouldIncrement := []bool{true, false} // This is to mimic user behavior, some might cancel payment
 	b := go_payment_balancer.NewBalancer()
 	for _, gateway := range gateways {

@@ -1,7 +1,6 @@
 package go_payment_balancer
 
 import (
-	"errors"
 	"math/rand"
 	"sort"
 )
@@ -18,18 +17,20 @@ func newGateways() *gateways {
 	return &gateways{}
 }
 
-func (g *gateways) add(id interface{}, weight int) error {
+func (g *gateways) add(id interface{}, weight, counter int) {
+	defer g.sortByWeight()
 	for _, gateway := range *g {
 		if gateway.id == id {
-			return errors.New("error: id exists")
+			gateway.weight = weight
+			gateway.counter = counter
+			return
 		}
 	}
 	*g = append(*g, &gateway{
-		id:     id,
-		weight: weight,
+		id:      id,
+		weight:  weight,
+		counter: counter,
 	})
-	g.sortByWeight()
-	return nil
 }
 
 func (g *gateways) remove(id interface{}) {
@@ -38,7 +39,7 @@ func (g *gateways) remove(id interface{}) {
 		if gId.id == id {
 			continue
 		}
-		ng.add(gId.id, gId.weight)
+		ng.add(gId.id, gId.weight, gId.counter)
 	}
 	*g = *ng
 }

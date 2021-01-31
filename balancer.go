@@ -15,10 +15,10 @@ func NewBalancer() *Balancer {
 	return &Balancer{gateways: newGateways()}
 }
 
-func (b *Balancer) AddGateway(id interface{}, weight int) (err error) {
+func (b *Balancer) AddGateway(id interface{}, weight, counter int) {
 	defer b.m.Unlock()
 	b.m.Lock()
-	return b.gateways.add(id, weight)
+	b.gateways.add(id, weight, counter)
 }
 
 func (b *Balancer) RemoveGateway(id interface{}) {

@@ -86,6 +86,7 @@ func (b *Balancer) Report() (report string) {
 	return
 }
 
+// reset gateways
 func (b *Balancer) Reset() {
 	defer b.m.Unlock()
 	b.m.Lock()

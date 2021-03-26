@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"math/rand"
 	"testing"
+	"time"
 
 	"github.com/aliforever/go_payment_balancer"
 )
 
 func TestBalancer(t *testing.T) {
-	paymentsCount := 5000
+	rand.Seed(time.Now().Unix())
+	paymentsCount := 50
 	type Gateway struct {
 		Id      int
 		Title   string
@@ -21,17 +23,17 @@ func TestBalancer(t *testing.T) {
 			Id:      1,
 			Title:   "PayPal",
 			Weight:  1,
-			Counter: 0,
+			Counter: 10,
 		},
 		{
 			Id:      2,
 			Title:   "MasterCard",
 			Weight:  2,
-			Counter: 0,
+			Counter: 23,
 		},
 	}
 	// force tag
-	shouldIncrement := []bool{true, false} // This is to mimic user behavior, some might cancel payment
+	// shouldIncrement := []bool{true, false} // This is to mimic user behavior, some might cancel payment
 	b := go_payment_balancer.NewBalancer()
 	for _, gateway := range gateways {
 		b.AddGateway(gateway.Id, gateway.Weight, gateway.Counter)
@@ -43,10 +45,11 @@ func TestBalancer(t *testing.T) {
 			fmt.Println(err)
 			return
 		}
-		if shouldIncrement[rand.Intn(len(shouldIncrement))] {
-			b.IncrementGateway(g)
-			i++
-		}
+		/*		if shouldIncrement[rand.Intn(len(shouldIncrement))] {
+
+				}*/
+		b.IncrementGateway(g)
+		i++
 		if b.TotalPayments() >= paymentsCount {
 			break
 		}
